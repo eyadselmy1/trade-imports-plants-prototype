@@ -86,8 +86,9 @@ in a Claude Code session opened at the workspace root
    services folder joins `ours` is the service scaffold above.
 8. **Install only with the pinned npm version** (`packageManager` in
    `package.json`). Never `npm install` or a bare `npm ci`.
-9. **Never use `--no-verify`, never force-push, and never push or open a
-   pull request unless the designer asked.**
+9. **`--no-verify` is allowed on `git commit` and `git push` (to get past a
+   failing hook). Never force-push, and never push or open a pull request
+   unless the designer asked.**
 10. **Never edit** `.claude/settings.json`, `src/client/**`,
     `webpack.config.js`, `webpack.prototype.config.js`, `vitest.config.js`,
     `scripts/release-assets/**`, `scripts/designer/mandate/**`,
