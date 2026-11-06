@@ -10,8 +10,18 @@
 
 ## Members
 
-| Name | Role | Charter | Status |
-| ---- | ---- | ------- | ------ |
+| Name         | Role                    | Charter                               | Status      |
+| ------------ | ----------------------- | ------------------------------------- | ----------- |
+| Lead         | Lead / Triage           | .squad/agents/lead/charter.md         | 🏗️ Active   |
+| Security     | Security Engineer       | .squad/agents/security/charter.md     | 🔒 Active   |
+| Backend      | Backend Dev             | .squad/agents/backend/charter.md      | 🔧 Active   |
+| Frontend     | Frontend Dev            | .squad/agents/frontend/charter.md     | ⚛️ Active   |
+| Tester       | Tester                  | .squad/agents/tester/charter.md       | 🧪 Active   |
+| Reviewer     | Reviewer                | .squad/agents/reviewer/charter.md     | 🔎 Active   |
+| Scribe       | Durable Decision Merger | .squad/agents/scribe/charter.md       | 📋 Silent   |
+| Ralph        | Work Monitor            | .squad/agents/ralph/charter.md        | 🔄 Monitor  |
+| Rai          | RAI Reviewer            | .squad/agents/Rai/charter.md          | 🛡️ RAI      |
+| Fact Checker | Fact Checker            | .squad/agents/fact-checker/charter.md | 🔍 Verifier |
 
 ## Coding Agent
 
@@ -52,4 +62,8 @@
 ## Project Context
 
 - **Project:** trade-imports-plants-prototype
+- **Owner:** Eyad Selmy
 - **Created:** 2026-11-06
+- **Mission:** Remediate Git Insights Hub security-scan issues (`gih-security-scan` + `severity:critical`). Workflow: `.squad/skills/scan-remediation/SKILL.md`.
+- **Stack:** Node 24 (npm pinned 11.19.0), Hapi, Nunjucks + GOV.UK/MoJ Frontend, webpack/Sass, Vitest, Playwright (`fit/`). Runs with all services stubbed.
+- **Repo contract:** `AGENTS.md` (ownership via `overrides.json`, pinned npm, `--no-verify` allowed on commit and push, no force-push).

@@ -1,6 +1,25 @@
 {
-  "universe_usage_history": [],
-  "assignment_cast_snapshots": {},
+  "universe_usage_history": [
+    {
+      "universe": "descriptive",
+      "assignment_id": "scan-remediation-2026-11-06",
+      "used_at": "2026-11-06T15:28:37Z"
+    }
+  ],
+  "assignment_cast_snapshots": {
+    "scan-remediation-2026-11-06": {
+      "universe": "descriptive",
+      "created_at": "2026-11-06T15:28:37Z",
+      "agents": [
+        "lead",
+        "security",
+        "backend",
+        "frontend",
+        "tester",
+        "reviewer"
+      ]
+    }
+  },
   "transaction_id": "3a70dc9a-546a-4aa1-bdda-a3ad33ee5aa7",
-  "registry_revision": 1
+  "registry_revision": 2
 }
