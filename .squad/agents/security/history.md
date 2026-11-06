@@ -8,3 +8,4 @@
 ## Learnings
 
 <!-- Append new learnings below. Each entry is something lasting about the project. -->
+- 2026-11-06 (#5): GHSA-8494-f6mr-cjpv CONFIRMED (lockfile @hapi/content 6.0.2, no multipart routes yet). Fixed in draft PR #8.

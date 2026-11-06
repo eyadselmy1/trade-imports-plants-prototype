@@ -8,3 +8,4 @@
 ## Learnings
 
 <!-- Append new learnings below. Each entry is something lasting about the project. -->
+- 2026-11-06 (#5): transitive dep fix = `npx -y npm@11.19.0 update <pkg>` (lockfile-only) when parent ranges allow it; update overrides.json `patched` why for package-lock.json.

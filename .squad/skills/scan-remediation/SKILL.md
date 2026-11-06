@@ -143,3 +143,21 @@ safe:
 ## Learned patterns
 
 <!-- Append: build/run/test recipes, false-positive patterns, fixes that worked. -->
+
+- **Toolchain (2026-11-06, #5):** system Node is 22; use `. ~/.nvm/nvm.sh && nvm use` (`.nvmrc` →
+  24.22.1) and run npm as `npx -y npm@11.19.0 <cmd>` (nvm's bundled npm is 11.19.1, not the pin).
+- **Clean fix branches:** create them as a worktree from `origin/main`
+  (`git worktree add -b fix/scan-<n>-<slug> ../tipp-scan-<n> origin/main`) so uncommitted `.squad/`
+  state on the main checkout can never leak in; `npx -y npm@11.19.0 ci` there.
+- **Verify recipe:** `npm ls <pkg>`, `npm audit --json`, `run format:check`, `run lint:js|lint:scss|lint:arch`
+  (run separately — `lint` stops at the first failure), `npm test` (pretest builds the frontend),
+  `PORT=3199 npm start` then `curl localhost:3199/health` → 200.
+- **Known baseline failures on `main` (not ours to fix in scan PRs):** `lint:js` 2 errors in
+  `.squad/templates/ralph-triage.js`; `scripts/sync-upstream/overrides.test.js` "no path deleted is still
+  tracked" (`.mcp.json`). Commit fix branches with `--no-verify` (AGENTS.md rule 9) and list them in the PR.
+- **Transitive dependency CVEs:** if parent semver ranges already allow the patched version, a
+  lockfile-only `npm update <pkg>` is the minimal fix. `package-lock.json` is a `patched` entry in
+  `overrides.json` — update its `why` so the weekly sync keeps the bump, and flag the upstream fix in the PR.
+- **Regression tests for ReDoS/quadratic parsing:** build a tiny `Hapi.server()` with the affected
+  route option, `server.inject` a crafted payload, assert status + an elapsed bound with ≥4× margin;
+  prove it fails on the old version by temporarily swapping the package in `node_modules`.
