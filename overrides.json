@@ -130,7 +130,7 @@
     },
     {
       "path": "package-lock.json",
-      "why": "the two name lines only; take upstream's and regenerate with the npm version pinned in package.json's packageManager (npx --yes \"$(node scripts/npm-version.js)\" install --package-lock-only)"
+      "why": "the two name lines only, plus @hapi/content resolved to 6.0.3 (GHSA-8494-f6mr-cjpv, issue #5) until upstream resolves a patched version; take upstream's and regenerate with the npm version pinned in package.json's packageManager (npx --yes \"$(node scripts/npm-version.js)\" install --package-lock-only), then keep @hapi/content at 6.0.3 or later (npm update @hapi/content); src/server/common/helpers/multipart-payload.test.js fails if it reverts"
     },
     {
       "path": "NOTICE",
