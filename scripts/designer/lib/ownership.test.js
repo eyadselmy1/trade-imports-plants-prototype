@@ -230,7 +230,9 @@ describe('ownerOf against the real overrides.json', () => {
   it('Should agree with the sync rules for the prototype itself', () => {
     expect(ownerOf('overrides.json', { overrides })).toBe(OWNERS.yours)
     expect(ownerOf('package.json', { overrides })).toBe(OWNERS.sharedOnPurpose)
-    expect(ownerOf('.mcp.json', { overrides })).toBe(OWNERS.removed)
+    expect(ownerOf('sonar-project.properties', { overrides })).toBe(
+      OWNERS.removed
+    )
     expect(
       ownerOf(
         'src/server/app/sets/high-risk-plants/journeys/linear/features/origin/copy/copy.en.js',

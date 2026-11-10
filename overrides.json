@@ -7,7 +7,6 @@
     ".github/workflows/e2e-tests.yml",
     ".github/workflows/lighthouse.yml",
     ".github/workflows/publish-branch.yml",
-    ".mcp.json",
     ".sonarcloud.properties",
     ".sonarlint/**",
     "lighthouserc.cjs",
@@ -17,6 +16,7 @@
   ],
   "ours": [
     "overrides.json",
+    ".mcp.json",
     "scripts/sync-upstream/**",
     "src/prototype-defaults.js",
     "src/prototype-defaults.test.js",
@@ -126,11 +126,11 @@
     },
     {
       "path": "package.json",
-      "why": "name is prototype identity, plus the sync:upstream and new:set scripts and one block of designer:* scripts straight after new:set (a prefix upstream never uses, so the block never collides), ending with reports:merge, reports:demo and reports:service-map, which CI uses to merge the FIT and walkthrough reports and then build the stakeholder demo page and each release's service map (designer:service-map builds one locally) published to GitHub Pages; scripts and dependencies otherwise follow upstream, including upstream's check:workspace-stack, fit:start:workspace and lighthouse scripts and the @lhci/cli devDependency, kept on purpose to keep the patch and the lock small, although the files those scripts call are in 'deleted' so they fail if run in the prototype. build:frontend and frontend:watch also pass --config webpack.prototype.config.js, which adds each design release's own styles and scripts to the build: an upstream edit to either line conflicts, and the resolution must keep the flag (scripts/release-assets/webpack-callers.test.js fails on any webpack caller without it). The designer:* block includes designer:mandate, which records a designer's permission for release patterns. server:watch and server:debug also pass --ignore 'src/server/app/sets/*/assets/**', so saving a release's own styles or scripts rebuilds the bundle without restarting the server and signing the designer out: an upstream edit to either line conflicts, and the resolution must keep the flag"
+      "why": "name is prototype identity, plus the sync:upstream and new:set scripts and one block of designer:* scripts straight after new:set (a prefix upstream never uses, so the block never collides), ending with reports:merge, reports:demo and reports:service-map, which CI uses to merge the FIT and walkthrough reports and then build the stakeholder demo page and each release's service map (designer:service-map builds one locally) published to GitHub Pages; scripts and dependencies otherwise follow upstream, including upstream's check:workspace-stack, fit:start:workspace and lighthouse scripts and the @lhci/cli devDependency, kept on purpose to keep the patch and the lock small, although the files those scripts call are in 'deleted' so they fail if run in the prototype. build:frontend and frontend:watch also pass --config webpack.prototype.config.js, which adds each design release's own styles and scripts to the build: an upstream edit to either line conflicts, and the resolution must keep the flag (scripts/release-assets/webpack-callers.test.js fails on any webpack caller without it). The designer:* block includes designer:mandate, which records a designer's permission for release patterns. server:watch and server:debug also pass --ignore 'src/server/app/sets/*/assets/**', so saving a release's own styles or scripts rebuilds the bundle without restarting the server and signing the designer out: an upstream edit to either line conflicts, and the resolution must keep the flag. joi is pinned at 18.3.1, the blankie override resolves @hapi/joi to joi@17.13.9, and a hapi-pulse override sets its joi to $joi (hapi-pulse 4.0.0 asks for ~18.2.1, and no patched 18.2.x exists), all for GHSA-4528-x5fx-h6hg until upstream moves to a patched joi; keep them at those versions or later (npm run security-audit fails if they revert)"
     },
     {
       "path": "package-lock.json",
-      "why": "the two name lines only; take upstream's and regenerate with the npm version pinned in package.json's packageManager (npx --yes \"$(node scripts/npm-version.js)\" install --package-lock-only)"
+      "why": "the two name lines only, plus @hapi/content resolved to 6.0.3 (GHSA-8494-f6mr-cjpv, issue #5) and every joi resolved to 18.3.1 or 17.13.9 (GHSA-4528-x5fx-h6hg, from the package.json pins and overrides) until upstream resolves patched versions; take upstream's and regenerate with the npm version pinned in package.json's packageManager (npx --yes \"$(node scripts/npm-version.js)\" install --package-lock-only), then keep @hapi/content at 6.0.3 or later (npm update @hapi/content); src/server/common/helpers/multipart-payload.test.js fails if it reverts"
     },
     {
       "path": "NOTICE",
