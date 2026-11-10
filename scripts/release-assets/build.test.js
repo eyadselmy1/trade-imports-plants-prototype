@@ -103,6 +103,13 @@ describe('a build of the real webpack config with two fixture releases', () => {
     expect(alpha).not.toContain('.govuk-button')
   })
 
+  it('Should not ask for fonts or assets the application does not serve', () => {
+    const alpha = builtFile('release-alpha.css')
+
+    expect(alpha).not.toContain('@font-face')
+    expect(alpha).not.toMatch(/url\(["']?\/assets\//)
+  })
+
   it('Should keep release classes out of the application stylesheet', () => {
     expect(builtFile('application.css')).not.toContain('app-alpha-')
   })

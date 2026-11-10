@@ -55,6 +55,43 @@ const cssFilenameFor = (baseFilename, releases) => {
   }
 }
 
+// The application configures GOV.UK Frontend through MoJ Frontend (see
+// src/client/stylesheets/_govuk-frontend.scss): assets are served from
+// /public/assets/ and no GDS Transport @font-face is written. A release
+// stylesheet is compiled on its own, so without this it falls back to GOV.UK's
+// defaults and asks for fonts at /assets/fonts/, which the server does not
+// serve. This configures GOV.UK Frontend the same way before the release's own
+// first line.
+const releaseGovukSettings = `@use "govuk-frontend/dist/govuk/base" as prototype-release-govuk-settings with (
+  $govuk-assets-path: "/public/assets/",
+  $govuk-include-default-font-face: false
+);
+`
+
+const isSassLoader = (use) =>
+  use === 'sass-loader' ||
+  (typeof use === 'object' && use?.loader === 'sass-loader')
+
+const withReleaseSettings = (use, releaseStyles) => {
+  const options = typeof use === 'string' ? {} : (use.options ?? {})
+  const baseData = options.additionalData
+  return {
+    ...(typeof use === 'string' ? { loader: use } : use),
+    options: {
+      ...options,
+      additionalData: (content, loaderContext) => {
+        const data =
+          typeof baseData === 'function'
+            ? baseData(content, loaderContext)
+            : `${baseData ?? ''}${content}`
+        return releaseStyles.has(loaderContext.resourcePath)
+          ? `${releaseGovukSettings}${data}`
+          : data
+      }
+    }
+  }
+}
+
 const keyWithReleaseStylesNamed = (entryNames, { key, value }) => {
   const builtFile = value.split('/').at(-1)
   const entryName = entryNames.find((name) => builtFile.startsWith(`${name}.`))
@@ -68,6 +105,7 @@ const keyWithReleaseStylesNamed = (entryNames, { key, value }) => {
  * built from the release's `assets/scripts.js` and `assets/styles.scss`. Its
  * CSS is written as `stylesheets/release-<id>.css` (hashed as the base hashes
  * its own) and its manifest keys are `release-<id>.css` and `release-<id>.js`.
+ * Its Sass sees GOV.UK Frontend configured as the application configures it.
  * Everything the base builds keeps its own names.
  *
  * Throws at once when the base no longer has exactly one Sass asset rule with
@@ -82,6 +120,9 @@ export const withReleaseAssets = (baseConfig, releases) => {
   const stylesRule = findStylesRule(baseConfig.module.rules)
   const manifest = findManifest(baseConfig.plugins)
   const entryNames = releases.map(({ id }) => releaseEntryName(id))
+  const releaseStyles = new Set(
+    releases.map(({ styles }) => styles).filter(Boolean)
+  )
 
   manifest.hooks.customize.tap('ReleaseAssets', (entry) =>
     entry
@@ -101,7 +142,14 @@ export const withReleaseAssets = (baseConfig, releases) => {
               generator: {
                 ...rule.generator,
                 filename: cssFilenameFor(rule.generator.filename, releases)
-              }
+              },
+              ...(Array.isArray(rule.use) && {
+                use: rule.use.map((use) =>
+                  isSassLoader(use)
+                    ? withReleaseSettings(use, releaseStyles)
+                    : use
+                )
+              })
             }
           : rule
       )
