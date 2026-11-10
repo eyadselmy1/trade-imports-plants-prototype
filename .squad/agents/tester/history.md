@@ -8,4 +8,5 @@
 ## Learnings
 
 <!-- Append new learnings below. Each entry is something lasting about the project. -->
+
 - 2026-11-06 (#5): Node 24 via nvm + `npx -y npm@11.19.0`; baseline failures on main: 2 lint:js errors in .squad/templates/ralph-triage.js and overrides.test.js `.mcp.json`. App starts with `PORT=3199 npm start`, /health 200.
