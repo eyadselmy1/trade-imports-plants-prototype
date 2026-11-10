@@ -288,20 +288,12 @@ function normalizeTextForPathMatch(text) {
   return text.replace(/\\/g, '/').replace(/`/g, '')
 }
 
-function normalizeName(value) {
-  return cleanCell(value)
-    .toLowerCase()
-    .replace(/[^\w@\s-]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-}
-
 function normalizeRouteDestination(value) {
   return value
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
     .replace(/[*_`]/g, '')
     .replace(/\p{Extended_Pictographic}/gu, '')
-    .replace(/[\u200d\ufe0f]/g, '')
+    .replace(/\u200d|\ufe0f/g, '')
     .trim()
     .toLowerCase()
     .replace(/\s+/g, ' ')
