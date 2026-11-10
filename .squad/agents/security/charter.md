@@ -13,6 +13,7 @@
 - Reviewing each finding against HEAD of `main` (not the scanned commit)
 - Classification: CONFIRMED / NOT AN ISSUE / UNCLEAR-TOO BIG
 - Fix design (root-cause, minimal)
+- Security re-scan after every fix and CI-loop iteration (original finding gone, nothing new)
 - Secret issues: PLACEHOLDER / LIKELY REAL / ALREADY REMOVED classification and human checklist
 
 ## How I Work

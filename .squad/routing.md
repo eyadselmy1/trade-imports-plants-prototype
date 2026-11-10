@@ -4,32 +4,35 @@ How to decide who handles what.
 
 ## Routing Table
 
-| Work Type                                                        | Route To | Examples                                      |
-| ---------------------------------------------------------------- | -------- | --------------------------------------------- |
-| Security-scan triage, labels, issue comments, draft PRs          | Lead     | `gih-security-scan` issue queue               |
-| Finding review, classification, fix design, secret issues        | Security | CWE/CVE review, PLACEHOLDER vs LIKELY REAL    |
-| Hapi server, config, auth/session, dependency bumps              | Backend  | `@hapi/*` upgrades, lockfile, env reads       |
-| Nunjucks templates, GOV.UK/MoJ Frontend, client JS/Sass, webpack | Frontend | XSS/escaping, CSP-related fixes               |
-| Build, run, before/after tests, regression tests                 | Tester   | `npm test`, `npm run lint`, Playwright `fit/` |
-| Independent PR review vs acceptance criteria                     | Reviewer | Every scan-fix PR (never the author)          |
-| Unmatched work or ownership disputes                             | Lead     | —                                             |
+| Work Type                                                                            | Route To | Examples                                                      |
+| ------------------------------------------------------------------------------------ | -------- | ------------------------------------------------------------- |
+| Security-scan triage, labels, issue comments, draft PRs                              | Lead     | `gih-security-scan` issue queue                               |
+| Finding review, classification, fix design, secret issues, post-fix security re-scan | Security | CWE/CVE review, Semgrep / gitleaks / OSV re-scan              |
+| Hapi server, config, auth/session, dependency bumps                                  | Backend  | `@hapi/*` upgrades, lockfile, env reads                       |
+| Nunjucks templates, GOV.UK/MoJ Frontend, client JS/Sass, webpack                     | Frontend | XSS/escaping, CSP-related fixes                               |
+| Build, run, local tests before/after, CI-matched checks, CI loop, regression tests   | Tester   | Local test suites, `gh pr checks`, `gh run view --log-failed` |
+| Independent PR review vs acceptance criteria                                         | Reviewer | Every scan-fix PR (never the author)                          |
+| Unmatched work or ownership disputes                                                 | Lead     | —                                                             |
 
 Preset installation adds concrete routes for the configured team. Add or edit rows
 here only when their agent names also exist in the casting registry.
 
 ## Issue Routing
 
-| Label               | Action                                                                                                                                                                                             | Who                                                           |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| `squad`             | Triage: analyze issue, assign `squad:{member}` label                                                                                                                                               | Lead                                                          |
-| `squad:{name}`      | Pick up issue and complete the work                                                                                                                                                                | Named member                                                  |
-| `gih-security-scan` | Triage, then follow `.squad/skills/scan-remediation/SKILL.md` (in scope only with `severity:critical`; skip if `needs-human-review`, `remediation-in-progress`, open linked PR, or human assignee) | Lead → Security → Backend/Frontend → Tester → Reviewer → Lead |
+| Label               | Action                                                                                                                                                                                             | Who                                                                                                                     |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `squad`             | Triage: analyze issue, assign `squad:{member}` label                                                                                                                                               | Lead                                                                                                                    |
+| `squad:{name}`      | Pick up issue and complete the work                                                                                                                                                                | Named member                                                                                                            |
+| `gih-security-scan` | Triage, then follow `.squad/skills/scan-remediation/SKILL.md` (in scope only with `severity:critical`; skip if `needs-human-review`, `remediation-in-progress`, open linked PR, or human assignee) | Lead → Security → Backend/Frontend → Tester → Security (re-scan) → Reviewer → Lead (draft PR) → Tester + Lead (CI loop) |
 
 ### Security-scan issues (`gih-security-scan`)
 
 **Mandatory for every session and Ralph's watch mode.** These issues always go to the
 **Lead** for triage, then follow `.squad/skills/scan-remediation/SKILL.md` exactly:
-oldest first, one issue at a time, review against HEAD before any change, draft PRs only,
+oldest first, one issue at a time, review against HEAD before any change, run the local
+tests before and after the fix, security re-scan the fix, draft PRs only (body from the
+skill's `pr-template.md`), watch the PR's CI and loop on failures caused by the fix (max 3
+iterations), and move on only when the skill's "Definition of done" holds;
 never merge or close, never print secret values. Issues labelled `secret` take the
 skill's "Secret issues" path. Scan issues are NOT eligible for the generic eager/parallel
 rules below.

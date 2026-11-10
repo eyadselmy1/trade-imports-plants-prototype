@@ -19,6 +19,8 @@
 - Must not be the author of the change
 - Reject → name a different agent to revise (strict lockout)
 - Check the PR body lists met/unmet criteria and residual risk
+- Reject if the validation or re-scan table is missing, or a new failure or finding (local or CI) is unexplained
+- On each CI-loop iteration, re-check only the new delta
 
 ## Boundaries
 

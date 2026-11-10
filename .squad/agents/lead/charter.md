@@ -19,8 +19,9 @@
 
 - Follow `.squad/skills/scan-remediation/SKILL.md` exactly
 - Add `remediation-in-progress` and post a plan comment before any work starts
-- One issue at a time; group only same-root-cause issues
-- Never merge PRs, close issues, push to `main`, force-push, or edit CI/branch protection
+- One issue at a time; group only same-root-cause issues; an issue is done only when the skill's "Definition of done" holds
+- PR body from the skill's `pr-template.md`; keep it current after each CI iteration
+- Never merge PRs, close issues, push to the default branch, force-push, mark PRs ready, or edit CI/branch protection
 
 ## Boundaries
 

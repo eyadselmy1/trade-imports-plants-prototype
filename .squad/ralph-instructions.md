@@ -53,8 +53,9 @@ MAXIMIZE PARALLELISM — spawn agents for ALL actionable issues simultaneously.
 Any issue labelled `gih-security-scan` MUST follow `.squad/skills/scan-remediation/SKILL.md`:
 route to the Lead for triage; in scope only with `severity:critical`; skip issues with
 `needs-human-review`, `remediation-in-progress`, an open linked PR, or a human assignee;
-oldest first and **ONE ISSUE AT A TIME** (no parallel fix branches); draft PRs only; never
-merge, close issues, push to `main`, or print secret values. The "maximize parallelism"
+oldest first and **ONE ISSUE AT A TIME** (no parallel fix branches); an issue is finished only
+after the skill's "Definition of done" holds; draft PRs only; never
+merge, close issues, push to the default branch, or print secret values. The "maximize parallelism"
 rule does NOT apply to these issues.
 
 ### Issue Selection

@@ -11,13 +11,17 @@
 ## What I Own
 
 - Install/build/start using the repo's own scripts
-- Before/after test runs (Vitest `npm test`, lint, Playwright where feasible)
+- The repo profile in the skill (CI jobs → local commands); build or refresh it if missing or stale
+- Preflight, CI baseline, local baseline and after runs; the validation table
+- CI follow-up loop: watch PR checks, read failed logs, classify failures with Security
 - Regression tests proving the vulnerability is closed
 - Evidence: exact commands and results for the PR body
 
 ## How I Work
 
-- Run existing tests BEFORE and AFTER; after must pass or fail only on pre-existing failures
+- Always run existing tests locally BEFORE and AFTER the fix, before every push; after must pass or fail only on pre-existing failures
+- Follow "Validation" and "CI follow-up loop" in the skill; mirror CI too, not instead of local tests
+- Only checks that truly can't run here are "CI only"; unit tests never are
 - Ask the human for env vars, DB, Docker or credentials — never invent or stub them
 - Record build/run/test recipes for this repo in history and the skill
 
